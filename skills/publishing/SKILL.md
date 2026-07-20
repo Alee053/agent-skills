@@ -97,7 +97,7 @@ When `HERDR_ENV=1`, prefer a visible herdr pane for the watch so the user can ob
 - If checks fail or are cancelled, identify the failed checks and inspect the relevant logs or linked run.
 - If the deadline expires, stop the watch, query current check states with `gh pr checks`, and report the pending names rather than waiting indefinitely.
 
-Diagnose CI failures into one of: implementation defect, flaky/infrastructure failure, missing configuration/permission, or unrelated base failure. Propose the smallest next action with evidence. Do not edit, commit, or push a fix without explicit approval; approved fixes return through `implementing`, `syncing-agents-md`, review, and verification before republishing.
+Diagnose CI failures into one of: implementation defect, flaky/infrastructure failure, missing configuration/permission, or unrelated base failure. Propose the smallest next action with evidence. Do not edit, commit, or push a fix without explicit approval; approved fixes return through `implementing`, final verification, conditional `syncing-agents-md`, and focused review before republishing.
 
 ## Conflict and Mergeability Report
 

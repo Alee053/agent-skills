@@ -71,7 +71,7 @@ Never use unstaged tests to claim an implementation-only commit is green when ch
 Before every commit, inspect status, the intended diff, the staged diff, and recent history. Match the repository's existing commit style when it is stricter than the suite convention.
 
 - Keep commits small enough to review but large enough to express one coherent change.
-- Do not mix cleanup, behavior, tests, documentation, or unrelated formatting.
+- Do not mix cleanup, documentation, or unrelated formatting with behavior. Tests may accompany behavior when splitting them would make either revision fail or misrepresent the verified state.
 - Do not amend or rewrite prior commits to hide iteration unless the user explicitly asks.
 - Do not push. `publishing` owns the first remote mutation.
 - Never commit files with secrets, credentials, private data, or unexplained generated noise.
