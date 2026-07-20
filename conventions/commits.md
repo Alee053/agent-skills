@@ -1,0 +1,23 @@
+# Commit Convention
+
+Use incremental conventional commits during implementation. Do not wait until the end and collapse unrelated work into one commit.
+
+## Format
+
+```text
+<type>(<scope>): <imperative description>
+```
+
+Use `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`, `style`, or `build`. Omit the scope when the repository does not have a clear one.
+
+## Rules
+
+- One coherent behavior or structural change per commit.
+- Keep the subject lowercase, imperative, and without a trailing period.
+- Explain why in the body only when the subject is insufficient.
+- Commit new or changed behavior tests separately with `test:` after the relevant implementation commit.
+- Leave each commit in a working state and run the checkpoint's narrow verification before committing.
+- Inspect status and diff before staging; stage only intended files.
+- Never commit secrets, credentials, `.env` files, debug artifacts, or AI attribution.
+- Never amend, force-push, or rewrite published history without explicit approval. A request to create a PR does not implicitly authorize rewriting an existing remote branch.
+- Keep commits local until `publishing` is explicitly requested.
