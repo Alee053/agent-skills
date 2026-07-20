@@ -30,7 +30,7 @@ skills/
   reviewing/            Independent diff, architecture, and quality review
   publishing/           Rebase check, push, GitHub PR, and CI monitoring
   syncing-agents-md/    Scoped AGENTS.md maintenance
-  herdr/                 herdr environment control reference
+  herdr/                 Concise herdr operating skill with on-demand CLI reference
 conventions/
   commits.md
   exploring-heuristics.md
