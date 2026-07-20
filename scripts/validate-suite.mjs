@@ -62,6 +62,9 @@ function parseFrontmatter(frontmatter, file) {
         continue
       }
       value = inner.replace(/''/g, "'")
+    } else if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(value)) {
+      errors.push(`${relative(file)}:${index + 2}: unsupported unquoted frontmatter value`)
+      continue
     }
 
     if (Object.hasOwn(values, key)) {
@@ -106,7 +109,7 @@ for (const directory of skillDirectories) {
   if (name && (name.length > 64 || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(name))) {
     errors.push(`${relative(file)}: invalid skill name '${name}'`)
   }
-  if (description && !/\bUse (?:when|after|only|for)\b/.test(description)) {
+  if (description && !/(?:^|[.!?]\s+)Use (?:when|after|only|for)\b/.test(description)) {
     errors.push(`${relative(file)}: description must contain an explicit 'Use when/after/only/for' trigger`)
   }
   if (name && skillNames.has(name)) errors.push(`${relative(file)}: duplicate skill name '${name}'`)
