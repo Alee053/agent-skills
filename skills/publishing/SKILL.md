@@ -27,7 +27,7 @@ Before any network mutation:
 1. Confirm the current branch is the intended feature branch and is not the default/protected branch.
 2. Inspect status, staged and unstaged changes, recent commits, remotes, and upstream tracking.
 3. Require a clean worktree. Stop if intended changes are uncommitted or unrelated changes would be included.
-4. Confirm final review has no unresolved must-fix finding and verification results are current.
+4. Confirm final review has no unresolved must-fix finding and record the reviewed base/head and verification results.
 5. Confirm `gh` is available and authenticated with `gh auth status`; never print tokens.
 6. Determine the repository, target remote, and base branch from Git/GitHub evidence. Do not assume `origin` or `main`.
 7. Check whether the branch already has a PR. Avoid creating duplicates; report the existing PR and ask whether the user wants it updated when intent is unclear.
@@ -49,7 +49,7 @@ If a rebase conflicts:
 2. Abort the rebase to restore the pre-attempt branch.
 3. Report the conflict and wait for user direction.
 
-Never guess conflict resolutions or merge the base branch as a fallback. After a successful rebase, rerun the checks affected by changed base code before pushing.
+Never guess conflict resolutions or merge the base branch as a fallback. After any successful rebase, stop publication and return the new base/head and complete diff to `ship` for risk-based verification, conditional guidance synchronization, and focused re-review. Resume pushing only when evidence is current against the rebased branch.
 
 ## Step 3: Push Safely
 
@@ -88,14 +88,14 @@ Capture the PR URL and confirm its base, head, state, and mergeability with `gh 
 
 ## Step 5: Watch CI
 
-Watch the PR's checks until they complete with `gh pr checks --watch`. Use `--fail-fast` only when early failure is more useful than collecting all results.
+Watch the PR's checks with an explicit deadline. Use the repository's known CI duration when available; otherwise default to 15 minutes. Run `gh pr checks --watch` under the execution tool's timeout, or use bounded polling when no command timeout is available. Use `--fail-fast` only when early failure is more useful than collecting all results.
 
 When `HERDR_ENV=1`, prefer a visible herdr pane for the watch so the user can observe CI while the coordinating agent remains available. Otherwise run it normally.
 
 - If checks pass, report success.
 - If no checks exist, report that no CI was configured or discovered.
 - If checks fail or are cancelled, identify the failed checks and inspect the relevant logs or linked run.
-- If checks remain pending beyond a reasonable wait, report their names and current state rather than waiting indefinitely.
+- If the deadline expires, stop the watch, query current check states with `gh pr checks`, and report the pending names rather than waiting indefinitely.
 
 Diagnose CI failures into one of: implementation defect, flaky/infrastructure failure, missing configuration/permission, or unrelated base failure. Propose the smallest next action with evidence. Do not edit, commit, or push a fix without explicit approval; approved fixes return through `implementing`, `syncing-agents-md`, review, and verification before republishing.
 
