@@ -10,7 +10,7 @@ Execute exactly the approved outcome while adapting safely to repository evidenc
 
 Use it from `ship` or standalone when the user has explicitly approved a spec and checkpoint plan. If approval or repository evidence is missing, stop rather than infer permission.
 
-Resolve shared references from the suite root. Follow `<suite-root>/conventions/commits.md`, `subagents.md`, `verification.md`, and `herdr-visibility.md`.
+Resolve shared references from the suite root. Follow `<suite-root>/conventions/commits.md`, `<suite-root>/conventions/subagents.md`, `<suite-root>/conventions/verification.md`, and `<suite-root>/conventions/herdr-visibility.md`.
 
 ## Required Inputs
 
@@ -20,13 +20,15 @@ Resolve shared references from the suite root. Follow `<suite-root>/conventions/
 - Current branch/worktree state and the baseline commit or diff range.
 - Existing user changes that must remain untouched.
 
+For review remediation, accept the original approved inputs plus specific must-fix findings and the post-review baseline. Findings that imply material plan drift still require user approval.
+
 ## Step 1: Preflight
 
 Before editing:
 
 1. Confirm explicit plan approval in the conversation.
 2. Inspect branch, status, recent commits, and the complete existing diff.
-3. Refuse to work on a protected/default branch unless the user explicitly accepted it.
+3. In the end-to-end `ship` workflow, require a feature branch/worktree. In standalone mode, refuse a protected/default branch unless the user explicitly accepts the risk and acknowledges that `publishing` will require moving the commits to a feature branch.
 4. Identify pre-existing changes and whether any overlap planned files. Preserve unrelated work; stop when safe isolation is impossible.
 5. Confirm repository-defined commands, relevant tests, and checkpoint boundaries from evidence.
 6. Track the checkpoints visibly and mark exactly one active at a time.
@@ -58,11 +60,11 @@ For each approved checkpoint:
 4. Add or update behavior tests unless the change is genuinely untestable. Record the reason when tests do not apply.
 5. Run the narrowest checks that prove the checkpoint, including new tests.
 6. Review the whole checkpoint diff for correctness, scope, secrets, debug artifacts, and accidental user-file changes.
-7. Stage only implementation files and create the relevant conventional commit.
-8. Stage behavior-test files separately and create the immediately following `test:` commit.
+7. Choose the smallest commit shape that leaves every revision green.
+8. Prefer an implementation commit followed immediately by `test:` when both states pass; otherwise commit the behavior slice and its tests atomically.
 9. Recheck status and mark the checkpoint complete only when its checks pass and intended commits exist.
 
-New tests may remain unstaged while the implementation commit is created, but both commits must represent working states and the tests must have passed against the implementation. Never commit known failing code as an intermediate checkpoint.
+Never use unstaged tests to claim an implementation-only commit is green when checking out that commit would fail existing tests. Never commit known failing code as an intermediate checkpoint.
 
 ## Commit Discipline
 

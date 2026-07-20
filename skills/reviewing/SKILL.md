@@ -10,7 +10,7 @@ Find defects and meaningful risks before publication. This skill is read-only: i
 
 Use it after implementation in `ship`, for a focused re-review after remediation, or standalone when the user asks to review a working tree, commit range, branch, or PR.
 
-Resolve shared references from the suite root. Follow `<suite-root>/conventions/subagents.md` and `verification.md`.
+Resolve shared references from the suite root. Follow `<suite-root>/conventions/subagents.md` and `<suite-root>/conventions/verification.md`.
 
 ## Review Modes and Inputs
 
@@ -34,7 +34,7 @@ Require the original findings plus the complete post-review diff, including reme
 
 ## Independent Reviewer Dispatch
 
-When invoked by the coordinating/main agent, dispatch one fresh `reviewer` specialist with a read-only mandate. If that specialist type is unavailable, dispatch a read-only `general` subagent and provide this skill's instructions in its prompt. When already executing as the delegated reviewer, review directly and do not redispatch.
+After implementation authorship in `ship`, dispatch one fresh `reviewer` specialist with a read-only mandate, or a read-only `general` fallback carrying this skill's instructions. For a standalone review started in a fresh context, review directly unless breadth or specialization justifies delegation. When already executing as the delegated reviewer, review directly and do not redispatch.
 
 The prompt must include:
 

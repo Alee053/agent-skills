@@ -42,7 +42,7 @@ Ask questions when the answer can change behavior, scope, public interfaces, arc
 - Allow a custom answer when the available choices are not exhaustive.
 - Carry prior answers forward; never ask the same decision twice.
 
-If an unresolved architecture choice is consequential and repository evidence does not favor one option, dispatch an `architect` specialist when available. Give it the request, relevant evidence, constraints, options, and a read-only mandate. Its result informs the question; it does not replace user approval.
+If an unresolved architecture choice is consequential and repository evidence does not favor one option, dispatch an `architect` specialist when available, otherwise a read-only `general` subagent with the same architecture brief. Give it the request, relevant evidence, constraints, and options. Its result informs the question; it does not replace user approval.
 
 Repeat only while a genuinely material decision remains. Do not prolong alignment for low-impact preferences the agent can safely infer and report.
 
@@ -72,7 +72,7 @@ Follow the spec with a short checkpoint plan, usually three to eight items:
 ```markdown
 **Plan**
 1. `<area/files>`: change `<behavior or structure>` so `<goal>`.
-2. `<tests>`: cover `<new or changed behavior>` and key failure cases.
+2. `<next behavior slice>`: implement and verify `<observable outcome>`.
 3. `<project guidance>`: update only if implementation changes durable repository knowledge.
 
 **Verification**
@@ -82,7 +82,7 @@ Follow the spec with a short checkpoint plan, usually three to eight items:
 Only material regression or delivery risks and how the plan contains them.
 ```
 
-Each checkpoint must be coherent, ordered, and independently committable. Separate behavior tests from implementation to match `<suite-root>/conventions/commits.md`. Name likely files or modules when evidence supports them; do not pretend exact paths are known when they are not.
+Each checkpoint is one coherent, ordered, independently committable behavior slice including its tests and targeted verification. Commit shape follows `<suite-root>/conventions/commits.md`: prefer a separate test commit only when both revisions remain green. Name likely files or modules when evidence supports them; do not pretend exact paths are known when they are not.
 
 ## Approval Gate
 
@@ -92,12 +92,20 @@ If the user changes the requested behavior, revise the spec and affected checkpo
 
 ## Output Contract
 
-Return, in order:
+Return exactly one state:
 
-1. Any decision-changing questions, or a statement that none remain.
-2. The shared spec and success criteria.
-3. The executive checkpoint plan, verification, and material risks.
-4. A clear approval request.
+```text
+NeedsDecision
+  A concise batch of decision-changing questions, consequences, and recommendations.
+  Stop without rendering a spec or plan.
+
+ReadyForApproval
+  The shared spec and success criteria.
+  The executive checkpoint plan, verification, and material risks.
+  A clear approval request.
+```
+
+After the user answers `NeedsDecision`, resume with all prior answers and return either another genuinely necessary decision batch or `ReadyForApproval`.
 
 Do not create plan/spec files, edit code, commit, or dispatch implementation agents.
 

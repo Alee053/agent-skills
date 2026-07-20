@@ -4,7 +4,7 @@
 
 This repository contains Ale's personal agent skill suite. The suite is intentionally small, language-agnostic, and project-agnostic. It should guide agents through high-quality engineering work without loading a large framework into every conversation.
 
-The target workflow is: issue or request -> safe branch -> focused exploration -> clarifying questions -> chat spec -> approved plan -> incremental implementation -> independent review -> verification -> report -> explicitly requested PR.
+The target workflow is: issue or request -> safe branch -> focused exploration -> clarifying questions -> chat spec -> approved plan -> incremental implementation -> verification -> conditional guidance sync -> independent review -> report -> explicitly requested PR.
 
 ## Design Principles
 
@@ -49,10 +49,10 @@ conventions/
 4. Ask concise, decision-changing questions with concrete options and a recommendation.
 5. When understanding is shared, render a short spec and success criteria in chat.
 6. Render an executive checkpoint plan in chat and wait for explicit approval.
-7. Implement one checkpoint at a time. Verify and commit each coherent unit; commit behavior tests separately.
+7. Implement one behavior-slice checkpoint at a time. Verify and commit each coherent unit; prefer separate test commits only when every commit remains independently green.
 8. Pause only when implementation materially diverges from the approved plan.
-9. Update affected `AGENTS.md` files when the work invalidates a claim or reveals durable, non-obvious project knowledge.
-10. Run an independent reviewer subagent, address must-fix findings, rerun affected `AGENTS.md` synchronization, and rerun relevant checks.
+9. Run final risk-based verification, then update affected `AGENTS.md` files only when the work invalidates a claim or reveals durable, non-obvious project knowledge.
+10. Run an independent reviewer subagent with complete implementation and verification evidence. Address must-fix findings, rerun verification and affected `AGENTS.md` synchronization, and request focused re-review.
 11. Report changes, verification, commits, limitations, and deviations. Stop until the user requests a PR.
 12. On explicit PR request, update from the base branch once, push, create the PR with `gh`, watch CI, and report conflicts or failures.
 
@@ -79,7 +79,7 @@ An orchestrator dispatching a subagent must pass the resolved suite root or inli
 
 Use the adaptive dispatch rules in `conventions/subagents.md`. Subagents start with isolated context, so prompts must include the task, boundaries, applicable `AGENTS.md` instructions, relevant skill or convention paths, and the required return shape.
 
-Prefer built-in task subagents for exploration, implementation units, and review. Use herdr for visible long-running processes, not as a second orchestration system by default.
+Prefer task subagents for exploration, implementation units, and independent review. `explore` and `general` are the portable baseline; specialized reviewer or architect agents may be used when available and must have a `general` fallback. Use herdr for visible long-running processes, not as a second orchestration system by default.
 
 Only the coordinating agent owns the Git index and commits. Concurrent editing subagents need disjoint file ownership and must not stage, commit, switch branches, or rewrite history.
 
@@ -101,3 +101,5 @@ If herdr is unavailable, continue with normal tools; herdr is an enhancement, no
 ## Future Direction
 
 The suite may later be packaged as an OpenCode plugin similar to `obra/superpowers`. Plugin loading, installation, and skill injection are intentionally out of scope until the reference implementation is available.
+
+"Independently reusable" means a role can be called without `ship` inside an installed complete suite; individual skill directories are not standalone distributions because they depend on shared conventions. Future packaging should preserve the full tree, register `skills/`, and make an explicit decision about collisions from generic role names.

@@ -1,6 +1,6 @@
 ---
 name: syncing-agents-md
-description: "Keeps scoped AGENTS.md guidance accurate after code changes. Use after implementation to correct invalidated claims and preserve durable, non-obvious discoveries without turning AGENTS.md into an issue log."
+description: "Keeps scoped AGENTS.md guidance accurate after final verification. Use when changes may invalidate guidance or reveal durable, non-obvious repository knowledge."
 license: MIT
 ---
 
@@ -8,14 +8,14 @@ license: MIT
 
 Keep repository guidance trustworthy as the code evolves. This skill edits only applicable `AGENTS.md` files and never stages or commits them.
 
-Use it after implementation, after review remediation, or standalone when the user asks to audit project agent guidance. Do not use it for changelogs, release notes, issue history, or general documentation cleanup.
+Use it after final verification when an implementation or review candidate indicates potentially stale guidance, a durable discovery, or changed architecture, commands, ownership, or generated-source relationships. Also use it standalone when the user asks to audit project agent guidance. Do not load it unconditionally when no trigger exists, and do not use it for changelogs, release notes, issue history, or general documentation cleanup.
 
 Resolve shared references from the suite root, never from the target repository. No subagent is needed by default because the changed-file scope and discoveries should already be known.
 
 ## Required Inputs
 
 - Repository root and final changed-file list or diff.
-- Implementation and review summaries.
+- Implementation summary and any available review findings.
 - Candidate discoveries encountered during exploration, implementation, and verification.
 - Existing `AGENTS.md` files and their directory scopes.
 - Final architecture, commands, and verification evidence.

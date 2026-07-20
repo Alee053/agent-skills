@@ -15,7 +15,9 @@ Use `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`, `style`, o
 - One coherent behavior or structural change per commit.
 - Keep the subject lowercase, imperative, and without a trailing period.
 - Explain why in the body only when the subject is insufficient.
-- Commit new or changed behavior tests separately with `test:` after the relevant implementation commit.
+- Tests are required for new or changed behavior unless genuinely inapplicable.
+- Prefer an immediate separate `test:` commit when implementation and test commits are each independently verifiable and green.
+- Commit code and tests atomically when splitting them would create a failing or misleading intermediate revision.
 - Leave each commit in a working state and run the checkpoint's narrow verification before committing.
 - Inspect status and diff before staging; stage only intended files.
 - Never commit secrets, credentials, `.env` files, debug artifacts, or AI attribution.

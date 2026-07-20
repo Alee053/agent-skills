@@ -1,112 +1,86 @@
 ---
 name: ship
-description: "Drive a Linear, GitHub, or plain-text issue through safe exploration, shared understanding, an approved plan, incremental implementation, independent review, verification, and an explicitly requested GitHub PR. Use when the user asks to start or ship an issue or feature end to end."
+description: "Drives a Linear, GitHub, or plain-text issue through exploration, alignment, approved implementation, review, verification, and an explicitly requested PR. Use when the user mentions an issue, pastes an issue body, asks to start feature work, or says to ship a change end to end."
 license: MIT
 ---
 
 # ship
 
-`ship` coordinates the issue-to-PR workflow. It owns phase order and approval boundaries; role skills own the work inside each phase.
+`ship` is the workflow state machine. It owns phase order, handoffs, and approval gates; each role skill owns its phase mechanics.
 
-Do not use this skill for a code question, a standalone review, or a small edit when the user does not want the full gated workflow.
+Do not use it for a code question, standalone review, or small edit when the user does not want the full gated workflow.
 
 ## Inputs
 
-Accept a Linear/GitHub issue identifier, pasted issue body, or clear feature request. If an identifier is provided and a configured tracker integration or CLI exists, inspect its usage and fetch the issue. Otherwise ask the user for the issue text; do not invent tracker commands or credentials.
+Accept a tracker identifier, pasted issue body, or clear feature request. If a configured tracker integration exists, inspect its usage and fetch identifiers without guessing commands or credentials. Otherwise ask for the issue text.
 
-Resolve the suite root from this skill's source, then read its `AGENTS.md` and conventions before dispatching work. Never resolve suite-relative paths against the target repository.
+Resolve the suite root from this skill's source. Suite-relative paths never resolve from the target repository.
 
-## Phase 0: Establish a Safe Work Area
+## State 0: Safe Work Area
 
-Before implementation:
+Inspect branch, default branch, worktree state, and remotes. Before implementation, require a real feature branch or worktree; default branches and detached HEAD are not valid end-to-end destinations. Preserve unrelated changes and stop when overlapping work prevents safe isolation. Never change Git topology without explicit user direction.
 
-1. Inspect the current branch, default branch, worktree state, and remotes.
-2. If on the default/protected branch or detached HEAD, stop and ask the user to create or select a feature branch/worktree, or explicitly accept the risk.
-3. If the tree is dirty, determine whether existing changes overlap the issue. Preserve unrelated work. Stop only when overlap makes safe isolation impossible.
-4. Never create, switch, delete, or rewrite branches without the user's explicit direction.
+Exploration and planning may proceed while the destination is being prepared. Implementation may not.
 
-Exploration may begin before the worktree is clean, but no implementation or commit may begin until the destination is safe.
+## State 1: Explore
 
-## Phase 1: Explore
+Load `exploring` with the request, repository root, branch context, known scope, and prior evidence.
 
-Load `exploring` and give it the issue, repository root, branch context, and any known scope. It must return one merged evidence summary, not raw subagent transcripts.
+Required result: one evidence brief containing the execution path, constraints, likely change surface, verification surface, risks, and open decisions.
 
-The summary should identify the affected execution path, repository conventions, likely files, tests and commands, risks, and unresolved decisions. Do not choose an implementation yet.
+## State 2: Align and Plan
 
-## Phase 2: Align on Intent
+Load `planning` with the request and exploration brief.
 
-Load `planning` with the issue and exploration summary.
+- On `NeedsDecision`, present the question batch and stop. Resume planning with the user's answers.
+- On `ReadyForApproval`, present the chat spec, success criteria, checkpoint plan, verification, and risks; then stop for explicit approval.
 
-1. Ask only questions that can materially change behavior, scope, architecture, data, security, or verification.
-2. Give concrete options and mark a recommendation when useful.
-3. When no meaningful unknowns remain, render a short prose spec and explicit success criteria in chat.
-4. Render an executive checkpoint plan: one concise line per independently committable unit, followed by verification and material risks.
-5. Stop for explicit approval. Do not write code before approval.
+Do not write code until the user approves the current `ReadyForApproval` result.
 
-Specs and plans stay in chat unless the user asks for a file.
+## State 3: Implement
 
-## Phase 3: Implement
+Load `implementing` with the approved planning result, exploration evidence, applicable `AGENTS.md` files, branch context, and protected pre-existing changes.
 
-Load `implementing` with the approved spec, checkpoint plan, exploration evidence, and applicable `AGENTS.md` files.
+Required result: completed checkpoints, changed files, local commits, checkpoint checks, tests, plan adaptations, guidance candidates, limitations, and blockers. Keep commits local.
 
-- Execute one checkpoint at a time.
-- Use bounded implementation subagents only for independent ownership areas.
-- Verify each checkpoint before committing it.
-- Follow `<suite-root>/conventions/commits.md`; commit behavior tests separately.
-- Keep commits local. Do not push during implementation.
-- Pause only when evidence requires a material change to the approved behavior, architecture, scope, or plan. Present the plan delta and wait for approval.
+On material plan drift, return to State 2 with the proposed delta and wait for approval.
 
-Small adaptations that preserve the approved outcome may proceed and must be noted in the final report.
+## State 4: Verify Candidate
 
-## Phase 4: Maintain Project Knowledge
+Run final risk-based verification following `<suite-root>/conventions/verification.md`. Use `<suite-root>/conventions/herdr-visibility.md` for useful visible long-running commands.
 
-Load `syncing-agents-md` after implementation. Update only `AGENTS.md` files whose scope contains changed code.
+Required result: exact commands, outcomes, failures, and unverified assumptions. Do not advance while a change-caused required check is failing.
 
-- Correct claims invalidated by the change.
-- Record durable, non-obvious discoveries that would prevent future agents from getting stuck.
-- Do not add issue-specific history, obvious code facts, or temporary debugging notes.
-- Commit meaningful documentation changes separately with `docs:`.
+## State 5: Synchronize Guidance Conditionally
 
-## Phase 5: Review and Verify
+Load `syncing-agents-md` only when implementation or verification indicates a stale claim, durable discovery, or changed architecture, commands, ownership, or generated-source relationship.
 
-Load `reviewing` and always dispatch an independent `reviewer` subagent. Give it the approved spec, applicable `AGENTS.md` files, repository conventions, commit range, and complete diff.
+Required result: updated/unchanged guidance, rejected candidates, and any proposed new scope. Commit actual guidance edits separately with `docs:` after validation.
 
-The review must prioritize correctness, regressions, architecture, security boundaries, test quality, and unplanned scope. Route must-fix changes back through `implementing`, create new commits, and rerun affected checks. Rerun `syncing-agents-md` after remediation. Whenever remediation or synchronization changes files, request a focused re-review of the complete post-review diff before continuing.
+## State 6: Review
 
-Then run the strongest relevant final checks following `<suite-root>/conventions/verification.md`. Use herdr according to `<suite-root>/conventions/herdr-visibility.md` when visible long-running commands are useful.
+Load `reviewing` in workflow mode. It owns independent reviewer dispatch and portable fallback.
 
-## Phase 6: Report and Stop
+Pass the approved spec and scope, exploration brief, applicable `AGENTS.md`, base/head commits, complete diff, commit list, implementation output, synchronization output, verification results, limitations, and guidance/architecture candidates.
 
-Report:
+On must-fix findings, return them to `implementing` in remediation mode, then repeat verification, conditional synchronization, and focused re-review. Allow at most two autonomous remediation rounds; after that, stop with remaining findings and ask the user how to proceed.
 
-- What changed and why, mapped to the agreed success criteria.
-- Verification commands and results.
-- Commit list.
-- Reviewer outcome and any accepted residual risks.
-- Plan deviations, limitations, and unverified assumptions.
+Advance when no must-fix findings remain or the user explicitly accepts a documented residual risk.
+
+## State 7: Report and Stop
+
+Report what changed against success criteria, verification results, commit list, reviewer outcome, guidance updates, plan deviations, limitations, and residual risks.
 
 Stop. Do not push or create a PR until the user explicitly requests it.
 
-## Phase 7: Publish on Explicit Request
+## State 8: Publish on Explicit Request
 
-When the user says to create or open the PR, load `publishing`.
+When the user asks to create or open the PR, load `publishing` with the final report, issue reference, repository instructions, intended remote/base, and current review/verification evidence.
 
-1. Confirm `gh` authentication, the intended remote, and the base branch.
-2. Fetch the base branch and attempt one rebase if the feature branch is behind and unpublished. If rebasing an existing remote branch would rewrite published commits, ask for explicit approval first.
-3. If conflicts occur, record the conflicting files, abort the attempted rebase to restore the branch, report the conflict, and wait. Never guess conflict resolutions.
-4. Push the feature branch, using force-with-lease only when a previously published branch was intentionally rebased.
-5. Create the PR with the issue link, concise summary, changes, verification, risks, and follow-ups.
-6. Watch PR checks. On success, return the URL and status. On failure, inspect relevant logs, diagnose, and propose a fix plan; do not edit or push a CI fix without approval.
+`publishing` owns base updates, conflict handling, pushing, PR creation, CI monitoring, mergeability reporting, and its approval boundaries. If publication changes the reviewed surface, return to verification and focused review before pushing.
 
-Never merge, change merge strategy, request reviewers, or update tracker state unless the user asks.
+Never merge, deploy, change merge strategy, request reviewers, or update tracker state unless the user asks.
 
 ## Stop Conditions
 
-Stop and ask the user when:
-
-- No safe feature branch/worktree is selected.
-- A decision changes product behavior, public interfaces, persistence, security, deployment, or cost.
-- Implementation materially diverges from the approved plan.
-- Existing overlapping changes cannot be preserved safely.
-- Rebase conflicts occur.
-- A CI fix would require new code or commits.
+Stop for missing issue context, unsafe work area, `NeedsDecision`, plan approval, material drift, unresolved required verification, review findings beyond the remediation limit, rebase conflicts, history-rewrite approval, authentication or permission failures, and any CI fix requiring new code.

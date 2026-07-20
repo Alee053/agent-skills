@@ -19,7 +19,7 @@ Every subagent prompt must include:
 - The checks it should run when editing.
 - The resolved suite root or the required convention content; never assume suite-relative paths resolve from the target repository.
 
-Use the narrowest suitable type: `explore` for codebase discovery, `reviewer` for independent review, `architect` for consequential design choices, and `general` for bounded implementation work.
+Use the narrowest available type. `explore` and `general` are the portable baseline. Prefer a specialized `reviewer` for independent review or `architect` for consequential design choices when the environment provides them; otherwise dispatch `general` with the corresponding role skill and a focused read-only prompt. Specialist availability must never block the workflow.
 
 ## Coordination
 
