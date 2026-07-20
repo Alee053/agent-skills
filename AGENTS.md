@@ -37,6 +37,8 @@ conventions/
   herdr-visibility.md
   subagents.md
   verification.md
+scripts/
+  validate-suite.mjs
 ```
 
 `ship` is the only end-to-end workflow skill. The other workflow skills must remain independently usable.
@@ -97,6 +99,7 @@ If herdr is unavailable, continue with normal tools; herdr is an enhancement, no
 - Do not duplicate a shared convention in multiple skills unless standalone packaging requires it.
 - Update this file whenever the suite layout or a workflow contract changes.
 - Validate frontmatter, referenced paths, and cross-skill responsibilities after structural edits.
+- Run `node scripts/validate-suite.mjs` after changing skills, conventions, or suite layout.
 
 ## Future Direction
 
