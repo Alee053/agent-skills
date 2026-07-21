@@ -1,4 +1,10 @@
-# Verification Convention
+---
+name: verification
+description: "Reference rules for risk-based verification order and evidence standards. Use when validating changed behavior, choosing which checks to run, or when another skill defers verification discipline to a shared rule."
+license: MIT
+---
+
+# verification
 
 Verification must prove the changed behavior, not merely that files parse.
 

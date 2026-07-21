@@ -1,4 +1,10 @@
-# herdr Visibility
+---
+name: herdr-visibility
+description: "Reference rules for when to use herdr as a visibility layer for long-running processes. Use when deciding whether to run tests, builds, servers, or logs in a visible sibling pane, or when another skill defers herdr visibility discipline to a shared rule."
+license: MIT
+---
+
+# herdr-visibility
 
 herdr is an optional visibility layer for long-running processes. It is not the default subagent transport.
 

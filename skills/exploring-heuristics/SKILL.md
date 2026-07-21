@@ -1,4 +1,10 @@
-# Exploration Heuristics
+---
+name: exploring-heuristics
+description: "Reference rules for exploration scope, the questions exploration must answer, and when to stop. Use when discovering repository evidence before planning, or when another skill defers exploration discipline to a shared rule."
+license: MIT
+---
+
+# exploring-heuristics
 
 Exploration exists to support a correct decision, not to inventory the whole repository.
 

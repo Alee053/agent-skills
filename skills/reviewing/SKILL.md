@@ -10,7 +10,7 @@ Find defects and meaningful risks before publication. This skill is read-only: i
 
 Use it after implementation in `ship`, for a focused re-review after remediation, or standalone when the user asks to review a working tree, commit range, branch, or PR.
 
-Resolve shared references from the suite root. Follow `<suite-root>/conventions/subagents.md` and `<suite-root>/conventions/verification.md`.
+Resolve shared references by skill name. Load `subagents` and `verification` for the rules this skill follows.
 
 ## Review Modes and Inputs
 

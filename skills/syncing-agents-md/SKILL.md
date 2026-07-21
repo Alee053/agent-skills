@@ -10,7 +10,7 @@ Keep repository guidance trustworthy as the code evolves. This skill edits only 
 
 Use it after final verification when an implementation or review candidate indicates potentially stale guidance, a durable discovery, or changed architecture, commands, ownership, or generated-source relationships. Also use it standalone when the user asks to audit project agent guidance. Do not load it unconditionally when no trigger exists, and do not use it for changelogs, release notes, issue history, or general documentation cleanup.
 
-Resolve shared references from the suite root, never from the target repository. No subagent is needed by default because the changed-file scope and discoveries should already be known.
+Resolve shared references by skill name. No subagent is needed by default because the changed-file scope and discoveries should already be known.
 
 ## Required Inputs
 
@@ -94,7 +94,7 @@ After editing:
 4. Review the documentation diff for unrelated rewording or duplicated rules.
 5. Return the changes to `reviewing` when synchronization happens after the main review.
 
-The coordinating agent stages the guidance files separately and creates a `docs:` commit following `<suite-root>/conventions/commits.md`.
+The coordinating agent stages the guidance files separately and creates a `docs:` commit following the `commits` skill.
 
 ## Output Contract
 

@@ -10,7 +10,7 @@ Publish a verified local branch without silently changing history or repository 
 
 Use it only after the user explicitly asks to create or open the PR. A completed implementation or approved plan is not publication permission. Do not use it to merge, release, deploy, request reviewers, or update issue state unless the user separately asks.
 
-Resolve shared references from the suite root. Follow `<suite-root>/conventions/commits.md`, `<suite-root>/conventions/verification.md`, and `<suite-root>/conventions/herdr-visibility.md`. Keep Git and network mutations in the coordinating agent; no subagent dispatch is needed.
+Resolve shared references by skill name. Load `commits`, `verification`, and `herdr-visibility` for the rules this skill follows. Keep Git and network mutations in the coordinating agent; no subagent dispatch is needed.
 
 ## Required Inputs
 

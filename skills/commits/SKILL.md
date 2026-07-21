@@ -1,6 +1,12 @@
-# Commit Convention
+---
+name: commits
+description: "Reference rules for incremental conventional commits during implementation. Use when about to stage, commit, revise implementation history, or when another skill defers commit discipline to a shared rule."
+license: MIT
+---
 
-Use incremental conventional commits during implementation. Do not wait until the end and collapse unrelated work into one commit.
+# commits
+
+Incremental conventional commits during implementation. Do not wait until the end and collapse unrelated work into one commit.
 
 ## Format
 

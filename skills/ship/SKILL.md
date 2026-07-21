@@ -14,7 +14,7 @@ Do not use it for a code question, standalone review, or small edit when the use
 
 Accept a tracker identifier, pasted issue body, or clear feature request. If a configured tracker integration exists, inspect its usage and fetch identifiers without guessing commands or credentials. Otherwise ask for the issue text.
 
-Resolve the suite root from this skill's source. Suite-relative paths never resolve from the target repository.
+Shared discipline lives in dedicated reference skills (`commits`, `verification`, `subagents`, `exploring-heuristics`, `herdr-visibility`, `external-research`). Load them by name when a state needs them.
 
 ## State 0: Safe Work Area
 
@@ -47,7 +47,7 @@ On material plan drift, return to State 2 with the proposed delta and wait for a
 
 ## State 4: Verify Candidate
 
-Run final risk-based verification following `<suite-root>/conventions/verification.md`. Use `<suite-root>/conventions/herdr-visibility.md` for useful visible long-running commands.
+Run final risk-based verification following `verification`. Load `herdr-visibility` for useful visible long-running commands.
 
 Required result: exact commands, outcomes, failures, and unverified assumptions. Do not advance while a change-caused required check is failing.
 

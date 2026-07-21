@@ -10,7 +10,7 @@ Turn an evidence-backed request into shared intent and an approved implementatio
 
 Use it after `exploring`, or standalone when the caller already supplies equivalent repository evidence. Do not use it to discover the codebase, implement changes, or expand a request beyond the user's intent.
 
-Resolve shared references from the suite root, never from the target repository. Follow `<suite-root>/conventions/subagents.md` when specialist input is needed.
+Resolve shared references by skill name. Load `subagents` when specialist input is needed.
 
 ## Required Inputs
 
@@ -82,7 +82,7 @@ Follow the spec with a short checkpoint plan, usually three to eight items:
 Only material regression or delivery risks and how the plan contains them.
 ```
 
-Each checkpoint is one coherent, ordered, independently committable behavior slice including its tests and targeted verification. Commit shape follows `<suite-root>/conventions/commits.md`: prefer a separate test commit only when both revisions remain green. Name likely files or modules when evidence supports them; do not pretend exact paths are known when they are not.
+Each checkpoint is one coherent, ordered, independently committable behavior slice including its tests and targeted verification. Commit shape follows `commits`: prefer a separate test commit only when both revisions remain green. Name likely files or modules when evidence supports them; do not pretend exact paths are known when they are not.
 
 ## Approval Gate
 

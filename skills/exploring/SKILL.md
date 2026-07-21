@@ -17,7 +17,7 @@ Use it as a standalone discovery skill or from `ship`. Do not use it for a known
 - Known scope, constraints, and exclusions.
 - Any prior evidence that should not be rediscovered.
 
-Resolve the suite root from this skill's source. Follow `<suite-root>/conventions/exploring-heuristics.md` and `<suite-root>/conventions/subagents.md`; never resolve these paths against the target repository.
+Resolve shared discipline by name. Load `exploring-heuristics` and `subagents` for the rules this skill follows.
 
 ## Step 1: Establish Repository Context
 

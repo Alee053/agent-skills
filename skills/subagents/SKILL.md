@@ -1,4 +1,10 @@
-# Subagent Dispatch
+---
+name: subagents
+description: "Reference rules for adaptive subagent dispatch, prompt contracts, and editing ownership. Use when splitting work across subagents, delegating exploration or implementation, or when another skill defers dispatch discipline to a shared rule."
+license: MIT
+---
+
+# subagents
 
 Use subagents when work has independent seams or benefits from an independent context. Do not delegate tiny targeted reads or duplicate work already assigned elsewhere.
 
@@ -13,11 +19,10 @@ Every subagent prompt must include:
 - The concrete goal and why the result is needed.
 - Exact directories, modules, or concerns it owns.
 - Explicit exclusions so agents do not scan the same area.
-- Applicable `AGENTS.md` instructions and relevant skill/convention paths.
+- Applicable `AGENTS.md` instructions and the names of any skills to load.
 - Whether it may edit or must remain read-only.
 - The required result shape and useful file references.
 - The checks it should run when editing.
-- The resolved suite root or the required convention content; never assume suite-relative paths resolve from the target repository.
 
 Use the narrowest available type. `explore` and `general` are the portable baseline. Prefer a specialized `reviewer` for independent review or `architect` for consequential design choices when the environment provides them; otherwise dispatch `general` with the corresponding role skill and a focused read-only prompt. Specialist availability must never block the workflow.
 

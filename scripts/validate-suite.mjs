@@ -121,18 +121,12 @@ const markdownFiles = walk(root).filter((file) => file.endsWith(".md"))
 for (const file of markdownFiles) {
   const content = fs.readFileSync(file, "utf8")
 
-  for (const match of content.matchAll(/`<suite-root>\/([^`\s]+)`/g)) {
-    const target = path.resolve(root, match[1])
-    if (!target.startsWith(`${root}${path.sep}`)) {
-      errors.push(`${relative(file)}: suite reference escapes repository root`)
-      continue
-    }
-    if (!fs.existsSync(target)) errors.push(`${relative(file)}: missing ${relative(target)}`)
+  if (/<suite-root>\//.test(content)) {
+    errors.push(`${relative(file)}: <suite-root>/ path references are no longer used; load skills by name instead`)
   }
 
-  for (const match of content.matchAll(/(?<!<suite-root>\/)conventions\/([a-z0-9._/-]+\.md)/gi)) {
-    const target = path.join(root, "conventions", match[1])
-    if (!fs.existsSync(target)) errors.push(`${relative(file)}: missing ${relative(target)}`)
+  for (const match of content.matchAll(/\bconventions\//g)) {
+    errors.push(`${relative(file)}: conventions/ paths are no longer used; load the corresponding reference skill by name instead`)
   }
 
   if (path.basename(file) === "SKILL.md") {
@@ -142,8 +136,12 @@ for (const file of markdownFiles) {
     }
   }
 
-  for (const match of content.matchAll(/\bload\s+`([a-z0-9-]+)`/gi)) {
-    if (!skillNames.has(match[1])) errors.push(`${relative(file)}: unknown skill '${match[1]}'`)
+  for (const match of content.matchAll(/\bload\s+([^.\n]+)/gi)) {
+    for (const nameMatch of match[1].matchAll(/`([a-z0-9][a-z0-9-]*)`/g)) {
+      if (!skillNames.has(nameMatch[1])) {
+        errors.push(`${relative(file)}: unknown skill '${nameMatch[1]}'`)
+      }
+    }
   }
 
   if (content.includes("Status: contract scaffold")) {

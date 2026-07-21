@@ -9,7 +9,7 @@ Use herdr as an optional visibility layer for servers, builds, tests, watchers, 
 
 Before any herdr command, confirm `HERDR_ENV=1`. If it is absent, say the session is not inside herdr and continue with normal tools. Never inspect or control a focused herdr pane from outside herdr.
 
-Follow `<suite-root>/conventions/herdr-visibility.md`. Read `references/cli.md` only when the task needs commands not covered here.
+Load `herdr-visibility` for when-to-use rules. Read `references/cli.md` only when the task needs commands not covered here.
 
 ## Core Safety Rules
 

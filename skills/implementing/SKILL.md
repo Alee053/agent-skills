@@ -10,7 +10,7 @@ Execute exactly the approved outcome while adapting safely to repository evidenc
 
 Use it from `ship` or standalone when the user has explicitly approved a spec and checkpoint plan. If approval or repository evidence is missing, stop rather than infer permission.
 
-Resolve shared references from the suite root. Follow `<suite-root>/conventions/commits.md`, `<suite-root>/conventions/subagents.md`, `<suite-root>/conventions/verification.md`, and `<suite-root>/conventions/herdr-visibility.md`.
+Resolve shared references by skill name. Load `commits`, `subagents`, `verification`, and `herdr-visibility` for the rules this skill follows.
 
 ## Required Inputs
 
@@ -68,7 +68,7 @@ Never use unstaged tests to claim an implementation-only commit is green when ch
 
 ## Commit Discipline
 
-Before every commit, inspect status, the intended diff, the staged diff, and recent history. Match the repository's existing commit style when it is stricter than the suite convention.
+Before every commit, inspect status, the intended diff, the staged diff, and recent history. Match the repository's existing commit style when it is stricter than the `commits` skill.
 
 - Keep commits small enough to review but large enough to express one coherent change.
 - Do not mix cleanup, documentation, or unrelated formatting with behavior. Tests may accompany behavior when splitting them would make either revision fail or misrepresent the verified state.
