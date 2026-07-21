@@ -22,6 +22,46 @@ Inspect branch, default branch, worktree state, and remotes. Before implementati
 
 Exploration and planning may proceed while the destination is being prepared. Implementation may not.
 
+## Fast Path (Optional Shortcut)
+
+After State 0 and before State 1, triage the change. If it is genuinely simple, propose skipping the formal explore/plan cycle and editing directly. Require explicit user approval; never auto-apply the fast path.
+
+A change qualifies as simple when all of the following are true:
+
+- Single coherent change, typically one to three files.
+- No public API, contract, persistence, migration, security, deployment, or cost implication.
+- Exactly one repository-consistent implementation is obvious from a quick read.
+- Verification surface is clear: existing tests cover it, or it is genuinely untestable.
+- No material unknowns that primary research or user input must resolve.
+
+When the criteria are met, present:
+
+```markdown
+**Fast Path Proposal**
+- Change: <one-line description>
+- Files: <likely files>
+- Verification: <targeted checks>
+- Skipped states: 1 (Explore brief), 2 (Plan approval); possibly 5 (Guidance sync) and 6 (Review)
+- Risk: <why skipping is safe>
+```
+
+Stop and wait for explicit approval. Silence is not approval.
+
+If approved:
+
+- Do one focused read of the affected path, not a full explore brief.
+- Load `external-research` if a genuine unknown surfaces mid-edit.
+- Make the smallest change that satisfies the request.
+- Run targeted verification per `verification`.
+- Commit following `commits`.
+- Skip `syncing-agents-md` unless a durable claim was actually invalidated.
+- Skip `reviewing` unless the user requests it or the diff grew beyond the fast-path criteria.
+- Report changes, verification, commits, and limitations; stop. Do not publish until asked.
+
+If the user declines, or any criterion fails, continue with the full workflow at State 1.
+
+If a fast-path edit reveals non-trivial scope, stop, preserve the worktree, and re-enter the full workflow at State 1 with what was discovered. Do not escalate a simple change into a complex one without surfacing the choice.
+
 ## State 1: Explore
 
 Load `exploring` with the request, repository root, branch context, known scope, and prior evidence.
