@@ -72,10 +72,10 @@ Required result: one evidence brief containing the execution path, constraints, 
 
 Load `planning` with the request and exploration brief.
 
-- On `NeedsDecision`, present the question batch and stop. Resume planning with the user's answers.
-- On `ReadyForApproval`, present the chat spec, success criteria, checkpoint plan, verification, and risks; then stop for explicit approval.
+- On **❓ Decisions Needed**, `planning` has already asked the decision batch. Stop and resume planning with the user's answers.
+- On **📋 Spec and Plan for Approval**, present the chat spec, success criteria, checkpoint plan, verification, and risks; then stop for explicit approval.
 
-Do not write code until the user approves the current `ReadyForApproval` result.
+Do not write code until the user approves the current spec and plan for approval.
 
 ## State 3: Implement
 
@@ -123,4 +123,4 @@ Never merge, deploy, change merge strategy, request reviewers, or update tracker
 
 ## Stop Conditions
 
-Stop for missing issue context, unsafe work area, `NeedsDecision`, plan approval, material drift, unresolved required verification, review findings beyond the remediation limit, rebase conflicts, history-rewrite approval, authentication or permission failures, and any CI fix requiring new code.
+Stop for missing issue context, unsafe work area, decisions needed, plan approval, material drift, unresolved required verification, review findings beyond the remediation limit, rebase conflicts, history-rewrite approval, authentication or permission failures, and any CI fix requiring new code.

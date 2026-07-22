@@ -31,7 +31,7 @@ Before editing:
 3. In the end-to-end `ship` workflow, require a feature branch/worktree. In standalone mode, refuse a protected/default branch unless the user explicitly accepts the risk and acknowledges that `publishing` will require moving the commits to a feature branch.
 4. Identify pre-existing changes and whether any overlap planned files. Preserve unrelated work; stop when safe isolation is impossible.
 5. Confirm repository-defined commands, relevant tests, and checkpoint boundaries from evidence.
-6. Track the checkpoints visibly and mark exactly one active at a time.
+6. When OpenCode's native `todowrite` tool is available and permitted, use it to track checkpoints visibly and mark exactly one active at a time. Otherwise, maintain checkpoint statuses in chat with exactly one active item. Do not require delegated subagents to use the native tool; OpenCode denies it to them by default.
 
 Do not create compatibility layers, dependencies, migrations, public APIs, or architecture changes that were not justified by the approved plan.
 

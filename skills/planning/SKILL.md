@@ -37,9 +37,12 @@ Only the last category becomes a user question. Do not ask about naming, style, 
 Ask questions when the answer can change behavior, scope, public interfaces, architecture, persistence, security, deployment, cost, compatibility, or verification.
 
 - Ask a concise batch rather than one question per turn when decisions are independent.
-- Offer concrete options and mark the recommended option with a short reason.
-- State the practical consequence of each option, not abstract pros and cons.
-- Allow a custom answer when the available choices are not exhaustive.
+- Use the host's native multiple-choice question tool rather than rendering questions or requesting written answers in chat.
+- On OpenCode, use `question`. Give each question a short, friendly `header` (for example, `❓ Storage`), use `multiple` only for independent choices, and keep the default custom answer enabled.
+- On Claude Code, use `AskUserQuestion`. Keep headers to 12 characters, ask one to four questions per call with two to four options each, use `multiSelect` only for independent choices, and rely on its automatic `Other` choice.
+- Offer concrete options with labels of one to five words. Put the recommended option first, append `(Recommended)` to its label, and describe the practical consequence of every option.
+- Never add an `Other` or catch-all option; both native tools supply a custom-answer choice automatically.
+- If the appropriate native tool is unavailable or denied, render the same choices under **❓ Decisions Needed** and accept a concise written answer instead.
 - Carry prior answers forward; never ask the same decision twice.
 
 If an unresolved architecture choice is consequential and repository evidence does not favor one option, dispatch an `architect` specialist when available, otherwise a read-only `general` subagent with the same architecture brief. Give it the request, relevant evidence, constraints, and options. Its result informs the question; it does not replace user approval.
@@ -51,7 +54,7 @@ Repeat only while a genuinely material decision remains. Do not prolong alignmen
 When meaningful unknowns are resolved, render a compact chat spec:
 
 ```markdown
-**Spec**
+**📋 Spec**
 3-6 sentences covering the current problem, intended behavior, affected boundary, and important constraints.
 
 **Success Criteria**
@@ -70,7 +73,7 @@ Success criteria must be observable and testable. Avoid implementation details u
 Follow the spec with a short checkpoint plan, usually three to eight items:
 
 ```markdown
-**Plan**
+**🗺️ Plan**
 1. `<area/files>`: change `<behavior or structure>` so `<goal>`.
 2. `<next behavior slice>`: implement and verify `<observable outcome>`.
 3. `<project guidance>`: update only if implementation changes durable repository knowledge.
@@ -86,26 +89,27 @@ Each checkpoint is one coherent, ordered, independently committable behavior sli
 
 ## Approval Gate
 
-After the spec and plan, stop and ask for explicit approval. Accept clear language such as "approved", "go", or "proceed". Questions, partial agreement, and silence are not approval.
+After the spec and plan, end with `**Approve Plan**` and ask for explicit approval. Accept clear language such as "approved", "go", or "proceed". Questions, partial agreement, and silence are not approval.
 
 If the user changes the requested behavior, revise the spec and affected checkpoints before asking again. Do not start implementation from a stale plan.
 
 ## Output Contract
 
-Return exactly one state:
+Return exactly one user-facing phase:
 
 ```text
-NeedsDecision
-  A concise batch of decision-changing questions, consequences, and recommendations.
+❓ Decisions Needed
+  Ask the concise decision-changing batch with the host's native question tool when available.
+  Otherwise, render the same choices under this heading and accept a concise written answer.
   Stop without rendering a spec or plan.
 
-ReadyForApproval
-  The shared spec and success criteria.
-  The executive checkpoint plan, verification, and material risks.
-  A clear approval request.
+📋 Spec and Plan for Approval
+  The shared spec, success criteria, and executive checkpoint plan.
+  Verification and material risks.
+  End with a clear approval request.
 ```
 
-After the user answers `NeedsDecision`, resume with all prior answers and return either another genuinely necessary decision batch or `ReadyForApproval`.
+After the user answers the decision batch, resume with all prior answers and return either another genuinely necessary batch or the spec and plan for approval.
 
 Do not create plan/spec files, edit code, commit, or dispatch implementation agents.
 
