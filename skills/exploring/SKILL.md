@@ -15,9 +15,9 @@ Use it as a standalone discovery skill or from `ship`. Do not use it for a known
 - The request, issue, or behavior to investigate.
 - Repository root and current branch/worktree context.
 - Known scope, constraints, and exclusions.
-- Any prior evidence that should not be rediscovered.
+- Any prior evidence that should not be rediscovered, including the active-MCP record when one exists.
 
-Resolve shared discipline by name. Load `exploring-heuristics` and `subagents` for the rules this skill follows.
+Resolve shared discipline by name. Load `exploring-heuristics` and `subagents` for the rules this skill follows. If the caller has not supplied an active-MCP record, load `external-research` and establish it before exploration.
 
 ## Step 1: Establish Repository Context
 
@@ -34,7 +34,7 @@ This reconnaissance exists to partition the work. Do not perform the detailed sc
 
 Use direct targeted tools when the repository is small or the affected path is already localized.
 
-For a broad repository, select two to four independent seams and dispatch `explore` subagents concurrently. Add more only when each additional agent owns a distinct area and will reduce total work.
+For a broad repository, select two to four independent seams and use the `host-capabilities` delegation route to dispatch available read-only agents concurrently. When no compatible route exists, explore the seams sequentially in the coordinating context. Add more only when each additional agent owns a distinct area and will reduce total work.
 
 Good splits are evidence-driven:
 

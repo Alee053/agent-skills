@@ -10,7 +10,7 @@ Turn an evidence-backed request into shared intent and an approved implementatio
 
 Use it after `exploring`, or standalone when the caller already supplies equivalent repository evidence. Do not use it to discover the codebase, implement changes, or expand a request beyond the user's intent.
 
-Resolve shared references by skill name. Load `subagents` when specialist input is needed.
+Resolve shared references by skill name. Load `host-capabilities` for native interaction routing and `subagents` when specialist input is needed.
 
 ## Required Inputs
 
@@ -37,15 +37,14 @@ Only the last category becomes a user question. Do not ask about naming, style, 
 Ask questions when the answer can change behavior, scope, public interfaces, architecture, persistence, security, deployment, cost, compatibility, or verification.
 
 - Ask a concise batch rather than one question per turn when decisions are independent.
-- Use the host's native multiple-choice question tool rather than rendering questions or requesting written answers in chat.
-- On OpenCode, use `question`. Give each question a short, friendly `header` (for example, `❓ Storage`), use `multiple` only for independent choices, and keep the default custom answer enabled.
-- On Claude Code, use `AskUserQuestion`. Keep headers to 12 characters, ask one to four questions per call with two to four options each, use `multiSelect` only for independent choices, and rely on its automatic `Other` choice.
+- Use the `host-capabilities` interaction route rather than rendering questions or requesting written answers in chat when a native selector is available.
 - Offer concrete options with labels of one to five words. Put the recommended option first, append `(Recommended)` to its label, and describe the practical consequence of every option.
-- Never add an `Other` or catch-all option; both native tools supply a custom-answer choice automatically.
+- Never add an `Other` or catch-all option when the selected native tool supplies a custom-answer choice.
+- After calling a native question tool, render only **❓ Decisions Needed** and a short prompt to submit the selections. Do not repeat the question batch in chat.
 - If the appropriate native tool is unavailable or denied, render the same choices under **❓ Decisions Needed** and accept a concise written answer instead.
 - Carry prior answers forward; never ask the same decision twice.
 
-If an unresolved architecture choice is consequential and repository evidence does not favor one option, dispatch an `architect` specialist when available, otherwise a read-only `general` subagent with the same architecture brief. Give it the request, relevant evidence, constraints, and options. Its result informs the question; it does not replace user approval.
+If an unresolved architecture choice is consequential and repository evidence does not favor one option, use the `host-capabilities` delegation route to dispatch an available architecture specialist or read-only general-purpose subagent. When no compatible delegation route exists, investigate the alternatives directly. Give any delegate the request, relevant evidence, constraints, and options. Its result informs the question; it does not replace user approval.
 
 Repeat only while a genuinely material decision remains. Do not prolong alignment for low-impact preferences the agent can safely infer and report.
 

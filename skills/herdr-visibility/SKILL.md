@@ -18,7 +18,7 @@ herdr is an optional visibility layer for long-running processes. It is not the 
 
 - The environment variable is absent.
 - The command is short or blocks the next decision.
-- A Task subagent is a better fit for isolated reasoning or code ownership.
+- The `host-capabilities` delegation route is a better fit for isolated reasoning or code ownership.
 - Splitting a pane would add coordination without useful visibility.
 
 ## Operating Rules

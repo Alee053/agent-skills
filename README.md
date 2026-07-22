@@ -55,6 +55,7 @@ Loaded by other skills or directly when their rule applies.
 | [`exploring-heuristics`](skills/exploring-heuristics/SKILL.md) | Exploration scope and stop conditions. |
 | [`herdr-visibility`](skills/herdr-visibility/SKILL.md) | When to use herdr for visible long-running processes. |
 | [`external-research`](skills/external-research/SKILL.md) | Active MCP detection and web research hierarchy. |
+| [`host-capabilities`](skills/host-capabilities/SKILL.md) | Native tool routing across OpenCode, Claude Code, and other hosts. |
 
 ## Workflow
 
@@ -82,7 +83,7 @@ The suite adapts to the active environment. When these MCP servers are connected
 - **Exa** — web search and page fetch (fallback for Firecrawl).
 - **Linear** — issue tracking for `ship`.
 
-When no research MCP is connected, the agent falls back to opencode's built-in `webfetch`.
+When no research MCP is connected, the agent follows the host-native fallback in [`host-capabilities`](skills/host-capabilities/SKILL.md).
 
 Optional tooling:
 
@@ -105,7 +106,7 @@ node scripts/validate-suite.mjs
 - Specs and plans live in chat, not repository files.
 - Small, coherent conventional commits; nothing is pushed until publication is requested.
 - `AGENTS.md` files are treated as maintained project knowledge.
-- Detect active MCPs and prefer them for capabilities they own.
+- Detect active MCPs and route native tools through host capabilities.
 
 See [`AGENTS.md`](AGENTS.md) for the full guide.
 

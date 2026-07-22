@@ -10,7 +10,7 @@ Execute exactly the approved outcome while adapting safely to repository evidenc
 
 Use it from `ship` or standalone when the user has explicitly approved a spec and checkpoint plan. If approval or repository evidence is missing, stop rather than infer permission.
 
-Resolve shared references by skill name. Load `commits`, `subagents`, `verification`, and `herdr-visibility` for the rules this skill follows.
+Resolve shared references by skill name. Load `commits`, `host-capabilities`, `subagents`, `verification`, and `herdr-visibility` for the rules this skill follows.
 
 ## Required Inputs
 
@@ -31,7 +31,7 @@ Before editing:
 3. In the end-to-end `ship` workflow, require a feature branch/worktree. In standalone mode, refuse a protected/default branch unless the user explicitly accepts the risk and acknowledges that `publishing` will require moving the commits to a feature branch.
 4. Identify pre-existing changes and whether any overlap planned files. Preserve unrelated work; stop when safe isolation is impossible.
 5. Confirm repository-defined commands, relevant tests, and checkpoint boundaries from evidence.
-6. When OpenCode's native `todowrite` tool is available and permitted, use it to track checkpoints visibly and mark exactly one active at a time. Otherwise, maintain checkpoint statuses in chat with exactly one active item. Do not require delegated subagents to use the native tool; OpenCode denies it to them by default.
+6. Use the `host-capabilities` checkpoint route to track checkpoints visibly and mark exactly one active at a time.
 
 Do not create compatibility layers, dependencies, migrations, public APIs, or architecture changes that were not justified by the approved plan.
 
@@ -39,7 +39,7 @@ Do not create compatibility layers, dependencies, migrations, public APIs, or ar
 
 Implement a small or tightly coupled checkpoint in the coordinating context.
 
-Use `general` implementation subagents only when work can be split into independent ownership areas. Follow the suite subagent prompt contract and additionally provide:
+Use a compatible implementation subagent only when work can be split into independent ownership areas; otherwise implement in the coordinating context. Follow the `host-capabilities` delegation route and the suite subagent prompt contract, then additionally provide:
 
 - The approved behavior and checkpoint it supports.
 - Exact files or directories it may edit and explicit exclusions.
@@ -65,18 +65,6 @@ For each approved checkpoint:
 9. Recheck status and mark the checkpoint complete only when its checks pass and intended commits exist.
 
 Never use unstaged tests to claim an implementation-only commit is green when checking out that commit would fail existing tests. Never commit known failing code as an intermediate checkpoint.
-
-## Commit Discipline
-
-Before every commit, inspect status, the intended diff, the staged diff, and recent history. Match the repository's existing commit style when it is stricter than the `commits` skill.
-
-- Keep commits small enough to review but large enough to express one coherent change.
-- Do not mix cleanup, documentation, or unrelated formatting with behavior. Tests may accompany behavior when splitting them would make either revision fail or misrepresent the verified state.
-- Do not amend or rewrite prior commits to hide iteration unless the user explicitly asks.
-- Do not push. `publishing` owns the first remote mutation.
-- Never commit files with secrets, credentials, private data, or unexplained generated noise.
-
-If hooks fail, diagnose and fix the cause, restage the intended files, and create a new commit attempt. Never skip hooks or disable checks to force a commit through.
 
 ## Verification and Failure Handling
 

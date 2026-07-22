@@ -14,11 +14,11 @@ Do not use it for a code question, standalone review, or small edit when the use
 
 Accept a tracker identifier, pasted issue body, or clear feature request. If a configured tracker integration exists, inspect its usage and fetch identifiers without guessing commands or credentials. Otherwise ask for the issue text.
 
-Shared discipline lives in dedicated reference skills (`commits`, `verification`, `subagents`, `exploring-heuristics`, `herdr-visibility`, `external-research`). Load them by name when a state needs them.
+Shared discipline lives in dedicated reference skills (`commits`, `host-capabilities`, `verification`, `subagents`, `exploring-heuristics`, `herdr-visibility`, `external-research`). Load them by name when a state needs them.
 
 ## State 0: Safe Work Area
 
-Inspect branch, default branch, worktree state, and remotes. Before implementation, require a real feature branch or worktree; default branches and detached HEAD are not valid end-to-end destinations. Preserve unrelated changes and stop when overlapping work prevents safe isolation. Never change Git topology without explicit user direction.
+Load `host-capabilities` and `external-research`, then record the host capability and active-MCP records from exposed tools. Inspect branch, default branch, worktree state, and remotes. Before implementation, require a real feature branch or worktree; default branches and detached HEAD are not valid end-to-end destinations. Preserve unrelated changes and stop when overlapping work prevents safe isolation. Never change Git topology without explicit user direction.
 
 Exploration and planning may proceed while the destination is being prepared. Implementation may not.
 

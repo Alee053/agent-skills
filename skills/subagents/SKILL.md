@@ -6,7 +6,7 @@ license: MIT
 
 # subagents
 
-Use subagents when work has independent seams or benefits from an independent context. Do not delegate tiny targeted reads or duplicate work already assigned elsewhere.
+Use subagents when work has independent seams or benefits from an independent context. Load `host-capabilities` to select a supported delegation route. Do not delegate tiny targeted reads or duplicate work already assigned elsewhere.
 
 ## Adaptive Split
 
@@ -24,7 +24,7 @@ Every subagent prompt must include:
 - The required result shape and useful file references.
 - The checks it should run when editing.
 
-Use the narrowest available type. `explore` and `general` are the portable baseline. Prefer a specialized `reviewer` for independent review or `architect` for consequential design choices when the environment provides them; otherwise dispatch `general` with the corresponding role skill and a focused read-only prompt. Specialist availability must never block the workflow.
+Use the narrowest available role from the selected host route. Prefer a specialized reviewer for independent review or architect for consequential design choices when the environment provides one; otherwise use an available general-purpose subagent with the corresponding role skill and a focused read-only prompt. If no compatible delegation route exists, perform the work directly. Specialist availability must never block the workflow.
 
 ## Coordination
 

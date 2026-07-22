@@ -39,9 +39,8 @@ Do not change reviewers, labels, milestones, projects, draft state, or maintaine
 Fetch the selected remote and compare the feature branch with its target base.
 
 - If up to date, continue.
-- If behind and the branch has not been published, attempt one rebase onto the fetched base.
-- If the remote feature branch exists and rebasing would rewrite its commits, stop and request explicit approval before rebasing or force-pushing. "Create the PR" is not that approval.
 - If the branch has diverged in a way a simple rebase does not safely explain, report ahead/behind state and stop.
+- If behind, report the ahead/behind state and request explicit approval before rebasing. "Create the PR" is not rebase or history-rewrite approval.
 
 If a rebase conflicts:
 

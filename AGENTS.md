@@ -16,8 +16,8 @@ The target workflow is: issue or request -> safe branch -> focused exploration -
 - Use small, coherent conventional commits. Do not push until PR publication is requested.
 - Treat `AGENTS.md` files as maintained project knowledge, not static onboarding text.
 - Use subagents where independent parallel work reduces latency or improves review quality; avoid duplicate scans.
-- Keep shared discipline in dedicated reference skills (`commits`, `verification`, `subagents`, `exploring-heuristics`, `herdr-visibility`, `external-research`) so role skills stay concise and the rules are invokable directly.
-- Detect active MCP servers once per session and prefer them for capabilities they own; fall back to built-in tools when absent. See `external-research`.
+- Keep shared discipline in dedicated reference skills (`commits`, `host-capabilities`, `verification`, `subagents`, `exploring-heuristics`, `herdr-visibility`, `external-research`) so role skills stay concise and the rules are invokable directly.
+- Detect active MCP servers once per session and prefer them for capabilities they own; route native interaction, tracking, delegation, and research through `host-capabilities`. See `external-research`.
 - Do not guess tool commands, APIs, repository structure, or project conventions when they can be inspected.
 
 ## Repository Layout
@@ -37,6 +37,7 @@ skills/
   subagents/              Reference: adaptive dispatch and prompt contract
   herdr-visibility/       Reference: when to use herdr for visible processes
   external-research/      Reference: active MCP detection and web research hierarchy
+  host-capabilities/      Reference: native tool routing across supported hosts
   herdr/                  Concise herdr operating skill with on-demand CLI reference
 scripts/
   validate-suite.mjs
@@ -63,7 +64,7 @@ Each skill is self-contained. When the suite is installed via `npx skills Alee05
 9. Run final risk-based verification, then update affected `AGENTS.md` files only when the work invalidates a claim or reveals durable, non-obvious project knowledge.
 10. Run an independent reviewer subagent with complete implementation and verification evidence. Address must-fix findings, rerun verification and affected `AGENTS.md` synchronization, and request focused re-review.
 11. Report changes, verification, commits, limitations, and deviations. Stop until the user requests a PR.
-12. On explicit PR request, update from the base branch once, push, create the PR with `gh`, watch CI, and report conflicts or failures.
+12. On explicit PR request, fetch and check the base branch once, request approval before any rebase, push, create the PR with `gh`, watch CI, and report conflicts or failures.
 
 For genuinely simple changes, `ship` may propose a fast path that skips the formal explore/plan cycle with the user's explicit approval. See the `ship` skill for criteria.
 
@@ -84,19 +85,19 @@ A role skill must not silently absorb the responsibility of another role. For ex
 
 Use the adaptive dispatch rules in the `subagents` skill. Subagents start with isolated context, so prompts must include the task, boundaries, applicable `AGENTS.md` instructions, the names of skills to load, and the required return shape.
 
-Prefer task subagents for exploration, implementation units, and independent review. `explore` and `general` are the portable baseline; specialized reviewer or architect agents may be used when available and must have a `general` fallback. Use `herdr` for visible long-running processes, not as a second orchestration system by default.
+Prefer the `host-capabilities` delegation route for exploration, implementation units, and independent review. Specialized reviewer or architect agents may be used when available, with an available general-purpose subagent or direct execution as the fallback. Use `herdr` for visible long-running processes, not as a second orchestration system by default.
 
 Only the coordinating agent owns the Git index and commits. Concurrent editing subagents need disjoint file ownership and must not stage, commit, switch branches, or rewrite history.
 
 ## MCP Awareness and External Research
 
-At the start of any non-trivial task, record which MCP servers are connected by inspecting the tools exposed in the current session. Typical names: `context7`, `firecrawl`, `exa`, `linear`, `github`, `playwright`.
+At the start of any non-trivial task, establish the `host-capabilities` record and record which MCP servers are connected by inspecting the tools exposed in the current session. Typical names: `context7`, `firecrawl`, `exa`, `linear`, `github`, `playwright`.
 
 When repository evidence is insufficient, use the research MCP that fits:
 
 - Library, framework, SDK, or cloud-service docs: prefer `context7`.
 - Web search and page extraction: prefer `firecrawl`, then `exa`.
-- No research MCP available: fall back to the host's built-in `webfetch`.
+- No research MCP available: follow the host-native fallback in `host-capabilities`.
 
 See the `external-research` skill for the full hierarchy and rules.
 

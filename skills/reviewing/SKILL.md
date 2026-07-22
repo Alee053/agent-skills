@@ -10,7 +10,7 @@ Find defects and meaningful risks before publication. This skill is read-only: i
 
 Use it after implementation in `ship`, for a focused re-review after remediation, or standalone when the user asks to review a working tree, commit range, branch, or PR.
 
-Resolve shared references by skill name. Load `subagents` and `verification` for the rules this skill follows.
+Resolve shared references by skill name. Load `host-capabilities`, `subagents`, and `verification` for the rules this skill follows.
 
 ## Review Modes and Inputs
 
@@ -34,7 +34,7 @@ Require the original findings plus the complete post-review diff, including reme
 
 ## Independent Reviewer Dispatch
 
-After implementation authorship in `ship`, dispatch one fresh `reviewer` specialist with a read-only mandate, or a read-only `general` fallback carrying this skill's instructions. For a standalone review started in a fresh context, review directly unless breadth or specialization justifies delegation. When already executing as the delegated reviewer, review directly and do not redispatch.
+After implementation authorship in `ship`, use the `host-capabilities` delegation route to dispatch one fresh read-only reviewer. When no compatible delegation route exists, review in a fresh context when the host supports one; otherwise review directly and report the reduced independence. For a standalone review started in a fresh context, review directly unless breadth or specialization justifies delegation. When already executing as the delegated reviewer, review directly and do not redispatch.
 
 The prompt must include:
 

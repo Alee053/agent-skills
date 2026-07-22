@@ -5,11 +5,11 @@ description: "Controls herdr workspaces, tabs, panes, and visible long-running p
 
 # herdr
 
-Use herdr as an optional visibility layer for servers, builds, tests, watchers, and logs. Task subagents remain the default for isolated reasoning and code work.
+Use herdr as an optional visibility layer for servers, builds, tests, watchers, and logs. The `host-capabilities` delegation route remains the default for isolated reasoning and code work.
 
 Before any herdr command, confirm `HERDR_ENV=1`. If it is absent, say the session is not inside herdr and continue with normal tools. Never inspect or control a focused herdr pane from outside herdr.
 
-Load `herdr-visibility` for when-to-use rules. Read `references/cli.md` only when the task needs commands not covered here.
+Load `herdr-visibility` and `host-capabilities` for when-to-use and delegation rules. Read `references/cli.md` only when the task needs commands not covered here.
 
 ## Core Safety Rules
 
@@ -51,7 +51,7 @@ If the wait times out, inspect current output and determine whether the process 
 
 ## Coordinate with a Visible Agent
 
-Use this only when the user specifically benefits from seeing a separate interactive agent. Prefer Task subagents for normal suite orchestration.
+Use this only when the user specifically benefits from seeing a separate interactive agent. Prefer the `host-capabilities` delegation route for normal suite orchestration.
 
 ```bash
 CURRENT_PANE="<focused-pane-id-from-pane-list>"
